@@ -67,7 +67,7 @@ export default function KissDayPage() {
             // FX
             if (type.id === 'muah') {
                 confetti({
-                    shapes: ['heart'],
+                    shapes: ['star'],
                     colors: ['#E91E63', '#F48FB1']
                 });
             }

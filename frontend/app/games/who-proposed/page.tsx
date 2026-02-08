@@ -29,7 +29,7 @@ export default function WhoProposedPage() {
 
             {/* Header */}
             <div className="max-w-md mx-auto flex items-center justify-between mb-8">
-                <button onClick={() => router.push(returnTo)} className="p-2 bg-white rounded-full shadow-sm">
+                <button onClick={() => router.push('/games')} className="p-2 bg-white rounded-full shadow-sm">
                     <ArrowLeft className="w-6 h-6 text-indigo-600" />
                 </button>
                 <div className="flex items-center gap-2">
