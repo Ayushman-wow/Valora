@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  /* Reverted to lighter original background */
+  --background-start: #fff0f3;
+  --background-end: #ffccd5;
+  --main-gradient: linear-gradient(135deg, #FFF0F3 0%, #FFCCD5 50%, #FFB3C1 100%);
+  --glass-border: rgba(255, 255, 255, 0.4);
+}
+
+body {
+  color: #2B2D42;
+  background-image: var(--main-gradient);
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-feature-settings: "cv11", "ss01";
+}
+
+/* Global Typography Override for Classy Feel */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-playfair), serif;
+  letter-spacing: -0.02em;
+  /* Tight tracking for elegance */
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 77, 109, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 77, 109, 0.6);
+}
+
+/* Glassmorphism utility */
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  /* Slightly more opaque for better text contrast */
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  transition: all 0.3s ease-in-out;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 45px 0 rgba(255, 77, 109, 0.15);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Classy Button Base */
+button {
+  font-family: var(--font-outfit), sans-serif;
+  /* Keep buttons legible */
+  letter-spacing: 0.02em;
+}
+
+/* Specific Classy Overrides */
+.font-classy {
+  font-family: var(--font-playfair), serif;
+}
