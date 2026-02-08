@@ -1,39 +1,30 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import { API_BASE_URL } from '@/config/env';
 
 /**
- * Next.js API Route for sending gift emails
+ * Next.js App Router API Route for sending gift emails
  * This proxies the request to the backend server
  */
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
-    }
-
+export async function POST(request: Request) {
     try {
+        const body = await request.json();
+
         const response = await fetch(`${API_BASE_URL}/api/gifts/send-email`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(req.body),
+            body: JSON.stringify(body),
         });
 
         const data = await response.json();
 
-        if (response.ok) {
-            res.status(200).json(data);
-        } else {
-            res.status(response.status).json(data);
-        }
+        return NextResponse.json(data, { status: response.status });
     } catch (error) {
         console.error('API route error:', error);
-        res.status(500).json({
+        return NextResponse.json({
             error: 'Failed to send email',
             details: error instanceof Error ? error.message : 'Unknown error'
-        });
+        }, { status: 500 });
     }
 }
