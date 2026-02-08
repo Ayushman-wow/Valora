@@ -1,5 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
+export const dynamic = 'force-dynamic';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Trophy, ArrowLeft, Heart } from 'lucide-react';
@@ -7,7 +8,7 @@ import * as GameManager from '@/lib/gameManager';
 import { COMPATIBILITY_QUESTIONS } from '@/lib/gameContent';
 import { useSession } from 'next-auth/react';
 
-export default function CompatibilityBlitzPage() {
+function CompatibilityBlitzContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -86,5 +87,13 @@ export default function CompatibilityBlitzPage() {
                 </motion.div>
             </div>
         </div>
+    );
+}
+
+export default function CompatibilityBlitzPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <CompatibilityBlitzContent />
+        </Suspense>
     );
 }

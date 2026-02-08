@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Clock, ArrowLeft, Music, Mic } from 'lucide-react';
@@ -16,7 +16,7 @@ const SONGS = [
     { lyric: "You belong with me...", answer: "You Belong With Me - Taylor Swift", options: ["Love Story - Taylor Swift", "You Belong With Me - Taylor Swift", "Shake It Off - Taylor Swift", "Blank Space - Taylor Swift"] }
 ];
 
-export default function SongGuessPage() {
+function SongGuessContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -133,5 +133,13 @@ export default function SongGuessPage() {
                 </motion.div>
             </div>
         </div>
+    );
+}
+
+export default function SongGuessPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <SongGuessContent />
+        </Suspense>
     );
 }

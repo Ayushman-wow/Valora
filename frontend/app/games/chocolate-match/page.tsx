@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, ArrowLeft, RefreshCw } from 'lucide-react';
@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 
 const EMJOIS = ['🍫', '🍬', '🍭', '🍪', '🍩', '🧁'];
 
-export default function ChocolateMatchPage() {
+function ChocolateMatchContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -128,5 +128,13 @@ export default function ChocolateMatchPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function ChocolateMatchPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <ChocolateMatchContent />
+        </Suspense>
     );
 }

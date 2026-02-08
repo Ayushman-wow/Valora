@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -8,7 +8,8 @@ import { Gamepad2, Users, Clock, Trophy, Play, Star } from 'lucide-react';
 import { GAME_CONFIGS, GameType, VALENTINE_DAYS, getGamesByDay } from '@/lib/gameTypes';
 import * as GameManager from '@/lib/gameManager';
 
-export default function GamesPage() {
+
+function GamesPageContent() {
     const { data: session } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -236,3 +237,12 @@ export default function GamesPage() {
         </div>
     );
 }
+
+export default function GamesPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading Games...</div>}>
+            <GamesPageContent />
+        </Suspense>
+    );
+}
+

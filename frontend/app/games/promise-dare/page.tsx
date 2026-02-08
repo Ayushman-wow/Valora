@@ -1,13 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Heart, Zap } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { PROMISE_DARES } from '@/lib/gameContent';
 
-export default function PromiseDarePage() {
+function PromiseDareContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/games';
+
     const [result, setResult] = useState<{ type: string; text: string } | null>(null);
     const [flipping, setFlipping] = useState(false);
 
@@ -81,8 +84,8 @@ export default function PromiseDarePage() {
                             initial={{ opacity: 0, rotateY: 90 }}
                             animate={{ opacity: 1, rotateY: 0 }}
                             className={`p-10 rounded-3xl shadow-2xl border-4 max-w-xl mx-auto ${result.type === 'promise'
-                                    ? 'bg-gradient-to-br from-pink-100 to-purple-100 border-pink-300 text-purple-900'
-                                    : 'bg-gradient-to-br from-red-900 to-orange-900 border-red-500 text-white'
+                                ? 'bg-gradient-to-br from-pink-100 to-purple-100 border-pink-300 text-purple-900'
+                                : 'bg-gradient-to-br from-red-900 to-orange-900 border-red-500 text-white'
                                 }`}
                         >
                             <div className="mb-6">
@@ -104,8 +107,8 @@ export default function PromiseDarePage() {
                             <button
                                 onClick={reset}
                                 className={`px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:scale-105 ${result.type === 'promise'
-                                        ? 'bg-purple-600 text-white hover:bg-purple-700'
-                                        : 'bg-white text-red-600 hover:bg-gray-100'
+                                    ? 'bg-purple-600 text-white hover:bg-purple-700'
+                                    : 'bg-white text-red-600 hover:bg-gray-100'
                                     }`}
                             >
                                 Play Again
@@ -116,5 +119,13 @@ export default function PromiseDarePage() {
 
             </div>
         </div>
+    );
+}
+
+export default function PromiseDarePage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <PromiseDareContent />
+        </Suspense>
     );
 }

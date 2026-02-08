@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Trophy, Zap, ArrowLeft } from 'lucide-react';
 import * as GameManager from '@/lib/gameManager';
 import { useSession } from 'next-auth/react';
 
-export default function HugMeterPage() {
+function HugMeterContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -107,5 +107,13 @@ export default function HugMeterPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function HugMeterPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <HugMeterContent />
+        </Suspense>
     );
 }

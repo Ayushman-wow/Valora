@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,7 +9,7 @@ import * as GameManager from '@/lib/gameManager';
 import { GameSession } from '@/lib/gameTypes';
 import { VALENTINE_TRIVIA, shuffleArray } from '@/lib/gameContent';
 
-export default function ValentineTriviaPage() {
+function ValentineTriviaContent() {
     const { data: session } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -384,5 +384,13 @@ export default function ValentineTriviaPage() {
                 </AnimatePresence>
             </div>
         </div>
+    );
+}
+
+export default function ValentineTriviaPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading Trivia...</div>}>
+            <ValentineTriviaContent />
+        </Suspense>
     );
 }

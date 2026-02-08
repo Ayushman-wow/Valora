@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -10,7 +10,7 @@ import { GameSession } from '@/lib/gameTypes';
 import Leaderboard from '@/components/Leaderboard';
 import { API_BASE_URL } from '@/config/env';
 
-export default function FastTapPage() {
+function FastTapContent() {
     const { data: session } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -286,5 +286,13 @@ export default function FastTapPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function FastTapPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <FastTapContent />
+        </Suspense>
     );
 }

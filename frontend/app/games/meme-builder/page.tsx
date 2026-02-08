@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Save, Sparkles, Image as ImageIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { MEME_TEMPLATES } from '@/lib/gameContent';
 
-export default function MemeBuilderPage() {
+function MemeBuilderContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/games';
     const [selectedTemplate, setSelectedTemplate] = useState('classic');
     const [topText, setTopText] = useState('WHEN YOU FORGET');
     const [bottomText, setBottomText] = useState('VALENTINE\'S DAY');
@@ -48,8 +50,8 @@ export default function MemeBuilderPage() {
                                     key={t.id}
                                     onClick={() => setSelectedTemplate(t.id)}
                                     className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${selectedTemplate === t.id
-                                            ? 'border-pink-500 bg-pink-50 text-pink-700'
-                                            : 'border-gray-200 hover:border-pink-200'
+                                        ? 'border-pink-500 bg-pink-50 text-pink-700'
+                                        : 'border-gray-200 hover:border-pink-200'
                                         }`}
                                 >
                                     {t.label}
@@ -129,5 +131,13 @@ export default function MemeBuilderPage() {
 
             </div>
         </div>
+    );
+}
+
+export default function MemeBuilderPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <MemeBuilderContent />
+        </Suspense>
     );
 }

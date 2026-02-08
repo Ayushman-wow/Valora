@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, ArrowLeft, Users, Link } from 'lucide-react';
 import * as GameManager from '@/lib/gameManager';
 import { useSession } from 'next-auth/react';
 
-export default function HugChainPage() {
+function HugChainContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -113,5 +113,13 @@ export default function HugChainPage() {
                 <p className="text-center mt-6 text-sm text-love-charcoal/50">Tip: Invite a friend to play this game!</p>
             </div>
         </div>
+    );
+}
+
+export default function HugChainPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <HugChainContent />
+        </Suspense>
     );
 }

@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Lock, Share2, Sparkles } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { SILLY_PROMISES } from '@/lib/gameContent';
 import confetti from 'canvas-confetti';
 
-export default function SillyPromisePage() {
+function SillyPromiseContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/games';
 
     // State
     const [action, setAction] = useState(SILLY_PROMISES.actions[0]);
@@ -143,5 +145,13 @@ export default function SillyPromisePage() {
 
             </div>
         </div>
+    );
+}
+
+export default function SillyPromisePage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <SillyPromiseContent />
+        </Suspense>
     );
 }

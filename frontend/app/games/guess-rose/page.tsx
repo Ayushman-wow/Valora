@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Clock, ArrowLeft, Heart, Sparkles, Flame, Star } from 'lucide-react';
@@ -9,7 +9,7 @@ import { ROSE_MEANINGS, shuffleArray } from '@/lib/gameContent';
 import confetti from 'canvas-confetti';
 import { useSession } from 'next-auth/react';
 
-export default function GuessTheRosePage() {
+function GuessTheRoseContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -282,4 +282,12 @@ function getEmojiForColor(color: string) {
         'orange': '🧡', 'lavender': '💜', 'peach': '🍑', 'black': '🖤', 'blue': '💙'
     };
     return map[color.toLowerCase()] || '🌹';
+}
+
+export default function GuessTheRosePage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <GuessTheRoseContent />
+        </Suspense>
+    );
 }

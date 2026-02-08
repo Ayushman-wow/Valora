@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, ArrowLeft, Clock } from 'lucide-react';
@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import Leaderboard from '@/components/Leaderboard';
 import { API_BASE_URL } from '@/config/env';
 
-export default function ChocolateCatchPage() {
+function ChocolateCatchContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -186,5 +186,13 @@ export default function ChocolateCatchPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function ChocolateCatchPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <ChocolateCatchContent />
+        </Suspense>
     );
 }

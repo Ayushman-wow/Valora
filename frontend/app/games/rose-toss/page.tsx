@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, ArrowLeft, Target, Play, RotateCcw } from 'lucide-react';
@@ -14,7 +14,7 @@ const SPAWN_RATE = 800;
 const GRAVITY = 3;
 const BASKET_WIDTH = 15; // percentage
 
-export default function RoseTossPage() {
+function RoseTossContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -30,7 +30,7 @@ export default function RoseTossPage() {
     const username = session?.user?.name || (typeof window !== 'undefined' ? localStorage.getItem('heartsync_username') : 'Guest') || 'Guest';
 
     // Refs for game loop to avoid stale closures
-    const requestRef = useRef<number>();
+    const requestRef = useRef<number | undefined>(undefined);
     const lastSpawnTime = useRef<number>(0);
     const basketRef = useRef<number>(50); // Direct ref for smooth movement
     const scoreRef = useRef(0);
@@ -279,5 +279,13 @@ export default function RoseTossPage() {
                 </>
             )}
         </div>
+    );
+}
+
+export default function RoseTossPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <RoseTossContent />
+        </Suspense>
     );
 }

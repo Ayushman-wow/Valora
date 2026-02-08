@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, ArrowLeft, RefreshCw, Handshake } from 'lucide-react';
@@ -8,7 +8,7 @@ import * as GameManager from '@/lib/gameManager';
 import { PROMISE_WORDS, shuffleArray } from '@/lib/gameContent';
 import { useSession } from 'next-auth/react';
 
-export default function PromiseBuilderPage() {
+function PromiseBuilderContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -110,5 +110,13 @@ export default function PromiseBuilderPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function PromiseBuilderPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading Promise Builder...</div>}>
+            <PromiseBuilderContent />
+        </Suspense>
     );
 }

@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Check, X, RefreshCw } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { CHOCOLATE_MOODS, shuffleArray } from '@/lib/gameContent';
 import confetti from 'canvas-confetti';
 
-export default function ChocolateMoodPage() {
+function ChocolateMoodContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/games';
 
     // Game State
     const [chocolates, setChocolates] = useState(() => shuffleArray([...CHOCOLATE_MOODS]));
@@ -87,10 +89,10 @@ export default function ChocolateMoodPage() {
                                 disabled={isMatched}
                                 animate={{ scale: isSelected ? 1.05 : 1, opacity: isMatched ? 0.5 : 1 }}
                                 className={`w-full p-4 rounded-xl flex items-center gap-4 transition-all ${isSelected
-                                        ? 'bg-amber-600 text-white shadow-lg ring-4 ring-amber-200'
-                                        : isMatched
-                                            ? 'bg-green-100 text-green-800'
-                                            : 'bg-white hover:bg-amber-100 text-amber-900 shadow-sm'
+                                    ? 'bg-amber-600 text-white shadow-lg ring-4 ring-amber-200'
+                                    : isMatched
+                                        ? 'bg-green-100 text-green-800'
+                                        : 'bg-white hover:bg-amber-100 text-amber-900 shadow-sm'
                                     }`}
                             >
                                 <span className="text-4xl">{item.emoji}</span>
@@ -119,8 +121,8 @@ export default function ChocolateMoodPage() {
                                     opacity: isMatched ? 0.5 : 1
                                 }}
                                 className={`w-full p-6 rounded-xl flex items-center justify-center text-center transition-all ${isMatched
-                                        ? 'bg-green-100 text-green-800 border-2 border-green-200'
-                                        : 'bg-white hover:bg-orange-100 text-amber-900 border-2 border-amber-100'
+                                    ? 'bg-green-100 text-green-800 border-2 border-green-200'
+                                    : 'bg-white hover:bg-orange-100 text-amber-900 border-2 border-amber-100'
                                     }`}
                             >
                                 <span className="font-bold text-lg">{item.mood}</span>
@@ -159,5 +161,13 @@ export default function ChocolateMoodPage() {
             </AnimatePresence>
 
         </div>
+    );
+}
+
+export default function ChocolateMoodPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <ChocolateMoodContent />
+        </Suspense>
     );
 }

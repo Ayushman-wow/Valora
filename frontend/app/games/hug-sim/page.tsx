@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Send, Zap } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { HUG_STYLES } from '@/lib/gameContent';
 import confetti from 'canvas-confetti';
 
-export default function HugSimPage() {
+function HugSimContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/games';
     const [selectedHug, setSelectedHug] = useState<typeof HUG_STYLES[0] | null>(null);
     const [hugging, setHugging] = useState(false);
     const [result, setResult] = useState<string | null>(null);
@@ -70,8 +72,8 @@ export default function HugSimPage() {
                                     key={hug.type}
                                     onClick={() => setSelectedHug(hug)}
                                     className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${selectedHug?.type === hug.type
-                                            ? 'bg-pink-100 border-pink-400 shadow-md transform scale-105'
-                                            : 'bg-white border-transparent hover:border-pink-200'
+                                        ? 'bg-pink-100 border-pink-400 shadow-md transform scale-105'
+                                        : 'bg-white border-transparent hover:border-pink-200'
                                         }`}
                                 >
                                     <span className="text-4xl">{hug.emoji}</span>
@@ -164,5 +166,13 @@ export default function HugSimPage() {
 
             </div>
         </div>
+    );
+}
+
+export default function HugSimPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <HugSimContent />
+        </Suspense>
     );
 }

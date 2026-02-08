@@ -1,14 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RefreshCw, AlertTriangle, HeartCrack, Zap } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { COUPLE_SCENARIOS } from '@/lib/gameContent';
 import confetti from 'canvas-confetti';
 
-export default function CoupleChaosPage() {
+function CoupleChaosContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/games';
+
     const [scenario, setScenario] = useState<{ scenario: string; options: string[] } | null>(null);
     const [result, setResult] = useState<string | null>(null);
 
@@ -132,5 +135,13 @@ export default function CoupleChaosPage() {
 
             </div>
         </div>
+    );
+}
+
+export default function CoupleChaosPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <CoupleChaosContent />
+        </Suspense>
     );
 }

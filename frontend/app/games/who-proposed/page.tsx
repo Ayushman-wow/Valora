@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Users, Share2, Shuffle, Crown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { PROPOSAL_STYLES } from '@/lib/gameContent';
 
-export default function WhoProposedPage() {
+function WhoProposedContent() {
     const router = useRouter();
     const [style, setStyle] = useState(PROPOSAL_STYLES[0]);
     const [friendName, setFriendName] = useState('');
@@ -124,5 +124,13 @@ export default function WhoProposedPage() {
 
             </div>
         </div>
+    );
+}
+
+export default function WhoProposedPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <WhoProposedContent />
+        </Suspense>
     );
 }

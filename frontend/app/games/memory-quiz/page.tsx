@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, ArrowLeft, Brain } from 'lucide-react';
@@ -15,7 +15,7 @@ const MEMORY_QUESTIONS = [
     "What's our special song?"
 ];
 
-export default function MemoryQuizPage() {
+function MemoryQuizContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -108,5 +108,13 @@ export default function MemoryQuizPage() {
                 </motion.div>
             </div>
         </div>
+    );
+}
+
+export default function MemoryQuizPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <MemoryQuizContent />
+        </Suspense>
     );
 }

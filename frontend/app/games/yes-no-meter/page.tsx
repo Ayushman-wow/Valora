@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Trophy, ArrowLeft, ThumbsUp, ThumbsDown, Meh } from 'lucide-react';
@@ -8,7 +8,7 @@ import * as GameManager from '@/lib/gameManager';
 import { YES_NO_QUESTIONS, shuffleArray } from '@/lib/gameContent';
 import { useSession } from 'next-auth/react';
 
-export default function YesNoMeterPage() {
+function YesNoMeterContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -130,5 +130,13 @@ export default function YesNoMeterPage() {
                 </motion.div>
             </div>
         </div>
+    );
+}
+
+export default function YesNoMeterPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <YesNoMeterContent />
+        </Suspense>
     );
 }

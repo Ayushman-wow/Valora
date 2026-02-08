@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Clock, ArrowLeft, Film, Star } from 'lucide-react';
@@ -10,7 +10,7 @@ import { useSession } from 'next-auth/react';
 import Leaderboard from '@/components/Leaderboard';
 import { API_BASE_URL } from '@/config/env';
 
-export default function EmojiKissPage() {
+function EmojiKissContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -193,5 +193,13 @@ export default function EmojiKissPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function EmojiKissPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <EmojiKissContent />
+        </Suspense>
     );
 }

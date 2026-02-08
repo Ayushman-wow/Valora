@@ -1,6 +1,6 @@
 'use client';
 // Movie Emoji - Same as emoji-kiss but themed differently
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Trophy, Clock, ArrowLeft, Film } from 'lucide-react';
@@ -8,7 +8,7 @@ import * as GameManager from '@/lib/gameManager';
 import { EMOJI_PUZZLES, shuffleArray } from '@/lib/gameContent';
 import { useSession } from 'next-auth/react';
 
-export default function MovieEmojiPage() {
+function MovieEmojiContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const gameId = searchParams.get('gameId');
@@ -118,5 +118,13 @@ export default function MovieEmojiPage() {
                 </motion.div>
             </div>
         </div>
+    );
+}
+
+export default function MovieEmojiPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <MovieEmojiContent />
+        </Suspense>
     );
 }

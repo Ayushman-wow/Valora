@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Trophy, ArrowLeft, Shirt, Crown, Glasses } from 'lucide-react';
 
@@ -13,8 +13,10 @@ const ACCESSORIES = {
     extras: ['🧣', '🎒', '👜', '🌂', '🎈']
 };
 
-export default function DressTeddyPage() {
+function DressTeddyContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/games';
     const [teddy, setTeddy] = useState({ hat: '', glass: '', outfit: '', extra: '' });
 
     // Screenshot function (Mock for now to avoid dependency issues)
@@ -91,5 +93,13 @@ export default function DressTeddyPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function DressTeddyPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <DressTeddyContent />
+        </Suspense>
     );
 }

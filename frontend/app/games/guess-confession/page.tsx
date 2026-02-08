@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,7 +9,7 @@ import * as GameManager from '@/lib/gameManager';
 import { GameSession } from '@/lib/gameTypes';
 import { CONFESSIONS, shuffleArray } from '@/lib/gameContent';
 
-export default function GuessConfessionPage() {
+function GuessConfessionContent() {
     const { data: session } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -174,5 +174,13 @@ export default function GuessConfessionPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function GuessConfessionPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <GuessConfessionContent />
+        </Suspense>
     );
 }

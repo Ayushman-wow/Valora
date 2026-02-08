@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Copy, Share2, Heart, Sparkles, Wand2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { PROPOSAL_SCENARIOS } from '@/lib/gameContent';
 import confetti from 'canvas-confetti';
 
-export default function FakeProposalPage() {
+function FakeProposalContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const returnTo = searchParams.get('returnTo') || '/games';
     const [scenario, setScenario] = useState<{ text: string; blanks: string[] } | null>(null);
     const [filledText, setFilledText] = useState('');
     const [tone, setTone] = useState<string>('dramatic');
@@ -151,5 +153,13 @@ export default function FakeProposalPage() {
 
             </div>
         </div>
+    );
+}
+
+export default function FakeProposalPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <FakeProposalContent />
+        </Suspense>
     );
 }

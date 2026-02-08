@@ -30,7 +30,14 @@ export default function KissDayPage() {
     const [recipient, setRecipient] = useState('');
 
     const { data: session } = useSession();
-    const getUserEmail = () => session?.user?.email || localStorage.getItem('heartsync_username') ? `${localStorage.getItem('heartsync_username')!.replace(/\s+/g, '')}@guest.com` : '';
+    const getUserEmail = () => {
+        if (session?.user?.email) return session.user.email;
+        if (typeof window !== 'undefined') {
+            const stored = localStorage.getItem('heartsync_username');
+            return stored ? `${stored.replace(/\s+/g, '')}@guest.com` : '';
+        }
+        return '';
+    };
 
 
     useEffect(() => {
@@ -151,32 +158,52 @@ export default function KissDayPage() {
                 )}
             </div>
 
+
             {/* Floating Background Hearts */}
             <div className="fixed inset-0 pointer-events-none">
-                {[...Array(10)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="absolute text-pink-200 text-4xl"
-                        initial={{
-                            x: Math.random() * window.innerWidth,
-                            y: window.innerHeight + 50
-                        }}
-                        animate={{
-                            y: -50,
-                            rotate: 360
-                        }}
-                        transition={{
-                            duration: 5 + Math.random() * 5,
-                            repeat: Infinity,
-                            delay: Math.random() * 5,
-                            ease: "linear"
-                        }}
-                    >
-                        ❤️
-                    </motion.div>
-                ))}
+                <FloatingHearts />
             </div>
 
         </div>
     );
 }
+
+function FloatingHearts() {
+    const [mounted, setMounted] = useState(false);
+    const [dimensions, setDimensions] = useState({ width: 1000, height: 1000 });
+
+    useEffect(() => {
+        setMounted(true);
+        setDimensions({ width: window.innerWidth, height: window.innerHeight });
+    }, []);
+
+    if (!mounted) return null;
+
+    return (
+        <>
+            {[...Array(10)].map((_, i) => (
+                <motion.div
+                    key={i}
+                    className="absolute text-pink-200 text-4xl"
+                    initial={{
+                        x: Math.random() * dimensions.width,
+                        y: dimensions.height + 50
+                    }}
+                    animate={{
+                        y: -50,
+                        rotate: 360
+                    }}
+                    transition={{
+                        duration: 5 + Math.random() * 5,
+                        repeat: Infinity,
+                        delay: Math.random() * 5,
+                        ease: "linear"
+                    }}
+                >
+                    ❤️
+                </motion.div>
+            ))}
+        </>
+    );
+}
+
