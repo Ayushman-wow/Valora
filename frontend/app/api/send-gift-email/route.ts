@@ -1,13 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { API_BASE_URL } from '@/config/env';
 
-/**
- * Next.js App Router API Route for sending gift emails
- * This proxies the request to the backend server
- */
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
     try {
-        const body = await request.json();
+        const body = await req.json();
 
         const response = await fetch(`${API_BASE_URL}/api/gifts/send-email`, {
             method: 'POST',
