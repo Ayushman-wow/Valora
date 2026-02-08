@@ -18,6 +18,7 @@ function GamesPageContent() {
     const [selectedDay, setSelectedDay] = useState('Rose Day');
     const [username, setUsername] = useState('');
     const [showUsernamePrompt, setShowUsernamePrompt] = useState(false);
+    const [tempUsername, setTempUsername] = useState('');
 
     const getCurrentUsername = () => {
         return session?.user?.name || username || 'Guest';
@@ -49,7 +50,6 @@ function GamesPageContent() {
 
     // Username prompt
     if (showUsernamePrompt) {
-        const [tempUsername, setTempUsername] = useState('');
 
         return (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
